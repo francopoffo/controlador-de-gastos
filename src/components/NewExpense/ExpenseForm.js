@@ -1,19 +1,19 @@
-import React, {useState} from "react";
+import React, { useState, useRef } from "react";
 import "./ExpenseForm.css";
 
 const ExpenseForm = (props) => {
-  const [enteredTitle, setEnteredTitle] = useState('');
-  const [enteredAmount, setEnteredAmount] = useState('');
-  const [enteredDate, setEnteredDate] = useState('');
+  const [enteredTitle, setEnteredTitle] = useState("");
+  const [enteredAmount, setEnteredAmount] = useState("");
+  const [enteredDate, setEnteredDate] = useState("");
 
   const titleChangeHandler = (event) => {
-    setEnteredTitle(event.target.value)
+    setEnteredTitle(event.target.value);
   };
   const amountChangeHandler = (event) => {
-    setEnteredAmount(event.target.value)
+    setEnteredAmount(event.target.value);
   };
   const dateChangeHandler = (event) => {
-    setEnteredDate(event.target.value)
+    setEnteredDate(event.target.value);
   };
 
   const submitHandler = (event) => {
@@ -22,51 +22,67 @@ const ExpenseForm = (props) => {
     const enteredData = {
       title: enteredTitle,
       amount: enteredAmount,
-      date: new Date(enteredDate)
+      date: new Date(enteredDate),
     };
 
-    props.onSaveExpenseData(enteredData)
+    props.onSaveExpenseData(enteredData);
 
-    setEnteredTitle('');
-    setEnteredAmount('');
-    setEnteredDate('');
+    setEnteredTitle("");
+    setEnteredAmount("");
+    setEnteredDate("");
+  };
 
+  const divRef = useRef();
+  const formRef = useRef();
+
+  const formHandler = () => {
+    divRef.current.classList.toggle("none");
+    formRef.current.classList.toggle("none");
   };
 
   return (
-    <form>
-      <div className="new-expense__controls">
-        <div className="new-expense__control">
-          <label>Title</label>
-          <input 
-          type="text" 
-          value={enteredTitle} 
-          onChange={titleChangeHandler}
-          />
-        </div>
-        <div className="new-expense__control">
-          <label>Amount</label>
-          <input 
-          type="number" 
-          value={enteredAmount} 
-          min="0.01" 
-          step="0.01" 
-          onChange={amountChangeHandler}
-          />
-        </div>
-        <div className="new-expense__control">
-          <label>Date</label>
-          <input 
-          type="date" 
-          value={enteredDate} 
-          onChange={dateChangeHandler}
-          />
-        </div>
+    <div className="new-expense__actions center">
+      <div ref={divRef}>
+        <button type="submit" onClick={formHandler}>
+          Adicionar gasto
+        </button>
       </div>
-      <div className="new-expense__actions">
-        <button type="submit" onSubmit={submitHandler}>Adicionar gasto</button>
-      </div>
-    </form>
+
+      <form ref={formRef} className="none" onSubmit={submitHandler}>
+        <div className="new-expense__controls">
+          <div className="new-expense__control">
+            <label>Descrição</label>
+            <input
+              type="text"
+              value={enteredTitle}
+              onChange={titleChangeHandler}
+            />
+          </div>
+          <div className="new-expense__control">
+            <label>Valor</label>
+            <input
+              type="number"
+              value={enteredAmount}
+              min="0.01"
+              step="0.01"
+              onChange={amountChangeHandler}
+            />
+          </div>
+          <div className="new-expense__control">
+            <label>Data</label>
+            <input
+              type="date"
+              value={enteredDate}
+              onChange={dateChangeHandler}
+            />
+          </div>
+        </div>
+        <div className="new-expense__actions">
+          <button onClick={formHandler}>Cancelar</button>
+          <button type="submit">Adicionar gasto</button>
+        </div>
+      </form>
+    </div>
   );
 };
 
